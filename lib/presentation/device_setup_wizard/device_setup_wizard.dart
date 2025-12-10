@@ -32,7 +32,7 @@ class _DeviceSetupWizardState extends State<DeviceSetupWizard> {
     if (_currentStep < _steps.length - 1) {
       setState(() => _currentStep++);
     } else {
-      Navigator.pushReplacementNamed(context, AppRoutes.appLauncherDesktop);
+      Navigator.pushReplacementNamed(context, AppRoutes.desktop);
     }
   }
 

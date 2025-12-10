@@ -53,7 +53,6 @@ class AccountStepWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 32.0),
-
             _buildTextField(
               controller: fullNameController,
               label: 'Full Name',
@@ -63,9 +62,7 @@ class AccountStepWidget extends StatelessWidget {
                 return null;
               },
             ),
-
             const SizedBox(height: 20.0),
-
             _buildTextField(
               controller: emailController,
               label: 'Work Email',
@@ -77,9 +74,7 @@ class AccountStepWidget extends StatelessWidget {
                 return null;
               },
             ),
-
             const SizedBox(height: 20.0),
-
             _buildTextField(
               controller: passwordController,
               label: 'Password',
@@ -93,9 +88,7 @@ class AccountStepWidget extends StatelessWidget {
                 return null;
               },
             ),
-
             const SizedBox(height: 20.0),
-
             _buildTextField(
               controller: confirmPasswordController,
               label: 'Confirm Password',
@@ -111,17 +104,11 @@ class AccountStepWidget extends StatelessWidget {
                 return null;
               },
             ),
-
             const SizedBox(height: 20.0),
-
             _buildCountryDropdown(theme),
-
             const SizedBox(height: 24.0),
-
             _buildTermsCheckbox(theme),
-
             const SizedBox(height: 16.0),
-
             Center(
               child: TextButton(
                 onPressed: () {
@@ -190,6 +177,55 @@ class AccountStepWidget extends StatelessWidget {
   }
 
   Widget _buildCountryDropdown(ThemeData theme) {
+    // Comprehensive list of European and worldwide countries
+    final List<String> countries = [
+      // European Countries
+      'Austria',
+      'Belgium',
+      'Bulgaria',
+      'Croatia',
+      'Cyprus',
+      'Czech Republic',
+      'Denmark',
+      'Estonia',
+      'Finland',
+      'France',
+      'Germany',
+      'Greece',
+      'Hungary',
+      'Ireland',
+      'Italy',
+      'Latvia',
+      'Lithuania',
+      'Luxembourg',
+      'Malta',
+      'Netherlands',
+      'Poland',
+      'Portugal',
+      'Romania',
+      'Slovakia',
+      'Slovenia',
+      'Spain',
+      'Sweden',
+      // Non-EU European Countries
+      'Norway',
+      'Switzerland',
+      'United Kingdom',
+      // North America
+      'United States',
+      'Canada',
+      'Mexico',
+      // Other Major Countries
+      'Australia',
+      'Brazil',
+      'China',
+      'India',
+      'Japan',
+      'South Korea',
+      'Singapore',
+      'United Arab Emirates',
+    ]..sort(); // Sort alphabetically
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       decoration: BoxDecoration(
@@ -216,15 +252,15 @@ class AccountStepWidget extends StatelessWidget {
                   color: const Color(0xFF00D9FF),
                   size: 24.0,
                 ),
-                items:
-                    ['Netherlands', 'United States', 'Germany', 'France']
-                        .map(
-                          (country) => DropdownMenuItem(
-                            value: country,
-                            child: Text(country),
-                          ),
-                        )
-                        .toList(),
+                isExpanded: true,
+                items: countries
+                    .map(
+                      (country) => DropdownMenuItem(
+                        value: country,
+                        child: Text(country),
+                      ),
+                    )
+                    .toList(),
                 onChanged: (value) {
                   if (value != null) onCountryChanged(value);
                 },

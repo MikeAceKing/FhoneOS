@@ -97,7 +97,7 @@ class _VoiceCallingTabWidgetState extends State<VoiceCallingTabWidget> {
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(13),
@@ -133,15 +133,15 @@ class _VoiceCallingTabWidgetState extends State<VoiceCallingTabWidget> {
               hintText: 'Enter phone number',
               prefixIcon: Icon(Icons.phone, color: Colors.grey[400]),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: Colors.grey[300]!),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: Colors.grey[300]!),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: Color(0xFF0066FF), width: 2),
               ),
             ),
@@ -155,7 +155,7 @@ class _VoiceCallingTabWidgetState extends State<VoiceCallingTabWidget> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF0066FF),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 elevation: 0,
               ),
@@ -219,7 +219,7 @@ class _VoiceCallingTabWidgetState extends State<VoiceCallingTabWidget> {
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey[200]!),
       ),
       child: Row(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/device_registration.dart';
+import '../../models/sync_configuration.dart';
 import '../../services/cloud_sync_service.dart';
 import './widgets/conflict_resolution_widget.dart';
 import './widgets/connected_devices_widget.dart';

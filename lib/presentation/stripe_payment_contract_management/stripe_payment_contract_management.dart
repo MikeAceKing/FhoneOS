@@ -115,7 +115,7 @@ class _StripePaymentContractManagementState
           ),
         );
 
-        Navigator.pushReplacementNamed(context, AppRoutes.fhoneOsDashboard);
+        Navigator.pushReplacementNamed(context, AppRoutes.dashboard);
       }
     } on StripeException catch (e) {
       if (mounted) {

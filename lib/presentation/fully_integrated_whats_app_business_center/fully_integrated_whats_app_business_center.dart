@@ -35,7 +35,13 @@ class _FullyIntegratedWhatsAppBusinessCenterState
   Future<void> _loadConversations() async {
     setState(() => _isLoading = true);
     try {
-      final conversations = await _messagingService.getConversations(
+      final userId = _messagingService.client.auth.currentUser?.id;
+      if (userId == null) {
+        setState(() => _isLoading = false);
+        return;
+      }
+      final conversations = await _messagingService.getUserConversations(
+        userId,
         platform: _selectedPlatform == 'all' ? null : _selectedPlatform,
       );
       setState(() {
@@ -54,7 +60,7 @@ class _FullyIntegratedWhatsAppBusinessCenterState
 
   Future<void> _loadMessages(String conversationId) async {
     try {
-      final messages = await _messagingService.getMessages(conversationId);
+      final messages = await _messagingService.getConversationMessages(conversationId);
       setState(() {
         _messages = messages;
       });
@@ -71,10 +77,15 @@ class _FullyIntegratedWhatsAppBusinessCenterState
     if (_selectedConversation == null) return;
 
     try {
+      final userId = _messagingService.client.auth.currentUser?.id;
+      if (userId == null) return;
+      
       await _messagingService.sendMessage(
-        conversationId: _selectedConversation!['id'],
+        userId: userId,
+        accountId: _selectedConversation!['account_id'] ?? '',
+        to: _selectedConversation!['whatsapp_contact_id'] ?? '',
         body: body,
-        mediaUrls: mediaUrls,
+        conversationId: _selectedConversation!['id'],
       );
       await _loadMessages(_selectedConversation!['id']);
     } catch (e) {

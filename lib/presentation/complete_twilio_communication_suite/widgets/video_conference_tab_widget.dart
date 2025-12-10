@@ -41,8 +41,7 @@ class _VideoConferenceTabWidgetState extends State<VideoConferenceTabWidget> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text('Create Video Session'),
         content: TextField(
           controller: _roomNameController,
@@ -50,7 +49,7 @@ class _VideoConferenceTabWidgetState extends State<VideoConferenceTabWidget> {
             labelText: 'Room Name',
             hintText: 'Enter session name',
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
         ),
@@ -124,7 +123,7 @@ class _VideoConferenceTabWidgetState extends State<VideoConferenceTabWidget> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Color(0xFF0066FF).withAlpha(77),
@@ -181,7 +180,7 @@ class _VideoConferenceTabWidgetState extends State<VideoConferenceTabWidget> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 elevation: 0,
               ),
@@ -246,7 +245,7 @@ class _VideoConferenceTabWidgetState extends State<VideoConferenceTabWidget> {
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey[200]!),
       ),
       child: Column(
@@ -297,7 +296,7 @@ class _VideoConferenceTabWidgetState extends State<VideoConferenceTabWidget> {
                             ),
                             decoration: BoxDecoration(
                               color: Colors.red[50],
-                              borderRadius: BorderRadius.circular(4.r),
+                              borderRadius: BorderRadius.circular(4),
                             ),
                             child: Row(
                               children: [
@@ -348,7 +347,7 @@ class _VideoConferenceTabWidgetState extends State<VideoConferenceTabWidget> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF0066FF),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 elevation: 0,
               ),

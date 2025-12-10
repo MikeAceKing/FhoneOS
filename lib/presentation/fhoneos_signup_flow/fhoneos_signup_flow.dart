@@ -93,7 +93,13 @@ class _FhoneosSignupFlowState extends State<FhoneosSignupFlow> {
   bool _validateCurrentStep() {
     switch (_currentStep) {
       case 0:
-        if (!_accountFormKey.currentState!.validate()) return false;
+        // Add null check before validate()
+        final formState = _accountFormKey.currentState;
+        if (formState == null) {
+          _showError('Form initialization error. Please refresh the page.');
+          return false;
+        }
+        if (!formState.validate()) return false;
         if (!_termsAccepted) {
           _showError('Please accept the Terms of Service');
           return false;
@@ -159,17 +165,16 @@ class _FhoneosSignupFlowState extends State<FhoneosSignupFlow> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading:
-            _currentStep > 0
-                ? IconButton(
-                  icon: CustomIconWidget(
-                    iconName: 'arrow_back',
-                    color: Colors.white,
-                    size: 24.0,
-                  ),
-                  onPressed: _previousStep,
-                )
-                : null,
+        leading: _currentStep > 0
+            ? IconButton(
+                icon: CustomIconWidget(
+                  iconName: 'arrow_back',
+                  color: Colors.white,
+                  size: 24.0,
+                ),
+                onPressed: _previousStep,
+              )
+            : null,
         title: Text(
           'Create FhoneOS Account',
           style: theme.textTheme.titleLarge?.copyWith(
@@ -186,7 +191,6 @@ class _FhoneosSignupFlowState extends State<FhoneosSignupFlow> {
               currentStep: _currentStep,
               totalSteps: 4,
             ),
-
             Expanded(
               child: PageView(
                 controller: _pageController,
@@ -210,7 +214,6 @@ class _FhoneosSignupFlowState extends State<FhoneosSignupFlow> {
                       setState(() => _termsAccepted = value);
                     },
                   ),
-
                   PhonePlanStepWidget(
                     countryPrefix: _countryPrefix,
                     numberType: _numberType,
@@ -229,14 +232,12 @@ class _FhoneosSignupFlowState extends State<FhoneosSignupFlow> {
                       setState(() => _selectedPlan = plan);
                     },
                   ),
-
                   AiAddonsStepWidget(
                     selectedAddons: _selectedAddons,
                     onAddonToggle: (key, value) {
                       setState(() => _selectedAddons[key] = value);
                     },
                   ),
-
                   BillingReviewStepWidget(
                     companyNameController: _companyNameController,
                     billingAddressController: _billingAddressController,
@@ -252,7 +253,6 @@ class _FhoneosSignupFlowState extends State<FhoneosSignupFlow> {
                 ],
               ),
             ),
-
             Container(
               padding: const EdgeInsets.all(24.0),
               decoration: BoxDecoration(
@@ -295,12 +295,9 @@ class _FhoneosSignupFlowState extends State<FhoneosSignupFlow> {
                   Expanded(
                     flex: 2,
                     child: ElevatedButton(
-                      onPressed:
-                          _isLoading
-                              ? null
-                              : (_currentStep == 3
-                                  ? _completeSignup
-                                  : _nextStep),
+                      onPressed: _isLoading
+                          ? null
+                          : (_currentStep == 3 ? _completeSignup : _nextStep),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF00D9FF),
                         foregroundColor: const Color(0xFF0A0E27),
@@ -313,27 +310,26 @@ class _FhoneosSignupFlowState extends State<FhoneosSignupFlow> {
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                       ),
-                      child:
-                          _isLoading
-                              ? const SizedBox(
-                                height: 24.0,
-                                width: 24.0,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    Color(0xFF0A0E27),
-                                  ),
-                                ),
-                              )
-                              : Text(
-                                _currentStep == 3
-                                    ? 'Start FhoneOS'
-                                    : _getNextButtonLabel(),
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  color: const Color(0xFF0A0E27),
-                                  fontWeight: FontWeight.w700,
+                      child: _isLoading
+                          ? const SizedBox(
+                              height: 24.0,
+                              width: 24.0,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Color(0xFF0A0E27),
                                 ),
                               ),
+                            )
+                          : Text(
+                              _currentStep == 3
+                                  ? 'Start FhoneOS'
+                                  : _getNextButtonLabel(),
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                color: const Color(0xFF0A0E27),
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                     ),
                   ),
                 ],

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../core/app_export.dart';
-import '../../widgets/custom_icon_widget.dart';
+import '../../core/app_export.dart';
+import '../../services/supabase_service.dart';
 
-/// Splash Screen - Branded app launch experience with initialization
-/// Displays app logo with animation while loading core Cloud OS services
+/// Splash Screen - Real Supabase connection verification
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -20,12 +19,13 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _fadeAnimation;
   bool _isInitializing = true;
   String _initializationStatus = 'Initializing...';
+  bool _hasConnectionError = false;
 
   @override
   void initState() {
     super.initState();
     _setupAnimations();
-    _initializeApp();
+    _verifySupabaseConnection();
   }
 
   @override
@@ -34,7 +34,6 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
-  /// Setup logo animations
   void _setupAnimations() {
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 1500),
@@ -58,39 +57,38 @@ class _SplashScreenState extends State<SplashScreen>
     _animationController.forward();
   }
 
-  /// Initialize app services and determine navigation path
-  Future<void> _initializeApp() async {
+  /// Real Supabase connection verification
+  Future<void> _verifySupabaseConnection() async {
     try {
-      // Simulate checking authentication status
-      await Future.delayed(const Duration(milliseconds: 800));
       if (mounted) {
-        setState(() => _initializationStatus = 'Loading preferences...');
+        setState(() => _initializationStatus = 'Checking database...');
       }
 
-      // Simulate loading user preferences
-      await Future.delayed(const Duration(milliseconds: 600));
+      // Verify Supabase client is accessible
+      final supabaseClient = SupabaseService.instance.client;
+
       if (mounted) {
-        setState(() => _initializationStatus = 'Connecting services...');
+        setState(() => _initializationStatus = 'Verifying connection...');
       }
 
-      // Simulate preparing WebSocket connections
-      await Future.delayed(const Duration(milliseconds: 800));
+      // Perform a simple query to verify connectivity
+      await supabaseClient.from('user_profiles').select('id').limit(1);
+
       if (mounted) {
-        setState(() => _initializationStatus = 'Almost ready...');
+        setState(() => _initializationStatus = 'Connection verified!');
       }
 
-      // Final delay before navigation
-      await Future.delayed(const Duration(milliseconds: 400));
+      await Future.delayed(const Duration(milliseconds: 500));
 
-      // Navigate based on authentication status
       if (mounted) {
         _navigateToNextScreen();
       }
     } catch (e) {
-      // Handle initialization errors
+      debugPrint('🚨 Supabase connection error: $e');
       if (mounted) {
         setState(() {
           _isInitializing = false;
+          _hasConnectionError = true;
           _initializationStatus = 'Connection failed';
         });
         _showRetryOption();
@@ -98,35 +96,26 @@ class _SplashScreenState extends State<SplashScreen>
     }
   }
 
-  /// Navigate to appropriate screen based on user state
   void _navigateToNextScreen() {
-    // For demo purposes, navigate to welcome screen
-    // In production, check actual authentication status
-    Navigator.pushReplacementNamed(context, '/welcome-login-screen');
+    Navigator.pushReplacementNamed(context, AppRoutes.signup);
   }
 
-  /// Show retry option after timeout
   void _showRetryOption() {
-    Future.delayed(const Duration(seconds: 5), () {
-      if (mounted && !_isInitializing) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Tap to retry'),
-            action: SnackBarAction(
-              label: 'RETRY',
-              onPressed: () {
-                setState(() {
-                  _isInitializing = true;
-                  _initializationStatus = 'Retrying...';
-                });
-                _initializeApp();
-              },
-            ),
-            duration: const Duration(seconds: 10),
-          ),
-        );
+    // Show retry button immediately
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted && _hasConnectionError) {
+        setState(() {}); // Trigger rebuild to show retry button
       }
     });
+  }
+
+  void _handleRetry() {
+    setState(() {
+      _isInitializing = true;
+      _hasConnectionError = false;
+      _initializationStatus = 'Retrying...';
+    });
+    _verifySupabaseConnection();
   }
 
   @override
@@ -134,7 +123,6 @@ class _SplashScreenState extends State<SplashScreen>
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
 
-    // Hide status bar on Android, match theme on iOS
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -223,7 +211,7 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                           child: Center(
                             child: CustomIconWidget(
-                              iconName: 'cloud',
+                              iconName: 'phone_iphone',
                               color: Colors.white,
                               size: 64,
                             ),
@@ -238,7 +226,7 @@ class _SplashScreenState extends State<SplashScreen>
                     FadeTransition(
                       opacity: _fadeAnimation,
                       child: Text(
-                        'CloudOS',
+                        'FhoneOS',
                         style: theme.textTheme.headlineLarge?.copyWith(
                           color: theme.colorScheme.onSurface,
                           fontWeight: FontWeight.w700,
@@ -253,7 +241,7 @@ class _SplashScreenState extends State<SplashScreen>
                     FadeTransition(
                       opacity: _fadeAnimation,
                       child: Text(
-                        'Your Digital Universe',
+                        'Your Communication Hub',
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                           letterSpacing: 0.5,
@@ -286,20 +274,41 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                         ],
                       )
-                    else
-                      // Error state
+                    else if (_hasConnectionError)
                       Column(
                         children: [
                           CustomIconWidget(
                             iconName: 'error_outline',
                             color: theme.colorScheme.error,
-                            size: 32,
+                            size: 48,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            _initializationStatus,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.error,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            _initializationStatus,
+                            'Unable to connect to database',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.error,
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          ElevatedButton.icon(
+                            onPressed: _handleRetry,
+                            icon: const Icon(Icons.refresh),
+                            label: const Text('Retry Connection'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: theme.colorScheme.primary,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 12,
+                              ),
                             ),
                           ),
                         ],

@@ -86,7 +86,7 @@ class _TwoFactorAuthTabWidgetState extends State<TwoFactorAuthTabWidget> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Color(0xFF6366F1).withAlpha(77),
@@ -139,7 +139,7 @@ class _TwoFactorAuthTabWidgetState extends State<TwoFactorAuthTabWidget> {
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(13),
@@ -169,15 +169,15 @@ class _TwoFactorAuthTabWidgetState extends State<TwoFactorAuthTabWidget> {
               hintText: '+1 (555) 123-4567',
               prefixIcon: Icon(Icons.phone, color: Colors.grey[400]),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: Colors.grey[300]!),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: Colors.grey[300]!),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: Color(0xFF6366F1), width: 2),
               ),
             ),
@@ -191,7 +191,7 @@ class _TwoFactorAuthTabWidgetState extends State<TwoFactorAuthTabWidget> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF6366F1),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 elevation: 0,
               ),
@@ -223,7 +223,7 @@ class _TwoFactorAuthTabWidgetState extends State<TwoFactorAuthTabWidget> {
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(13),
@@ -270,15 +270,15 @@ class _TwoFactorAuthTabWidgetState extends State<TwoFactorAuthTabWidget> {
                   decoration: InputDecoration(
                     counterText: '',
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(color: Colors.grey[300]!),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(color: Colors.grey[300]!),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(12),
                       borderSide:
                           BorderSide(color: Color(0xFF6366F1), width: 2),
                     ),
@@ -301,7 +301,7 @@ class _TwoFactorAuthTabWidgetState extends State<TwoFactorAuthTabWidget> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF6366F1),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 elevation: 0,
               ),

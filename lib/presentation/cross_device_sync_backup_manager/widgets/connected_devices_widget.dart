@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../models/device_registration.dart';
+import '../../../models/sync_configuration.dart';
 import '../../../services/cloud_sync_service.dart';
 
 class ConnectedDevicesWidget extends StatefulWidget {
@@ -20,7 +20,6 @@ class _ConnectedDevicesWidgetState extends State<ConnectedDevicesWidget> {
 
   Future<void> _authorizeDevice(String deviceId) async {
     try {
-      // Remove this line - authorizeDevice method doesn't exist in CloudSyncService
       await _syncService.updateDevicePermissions(
         deviceId: deviceId,
         syncEnabled: true,
@@ -45,7 +44,8 @@ class _ConnectedDevicesWidgetState extends State<ConnectedDevicesWidget> {
       builder: (context) => AlertDialog(
         title: const Text('Remove Device'),
         content: const Text(
-            'Are you sure you want to remove this device from sync?'),
+          'Are you sure you want to remove this device from sync?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -53,7 +53,9 @@ class _ConnectedDevicesWidgetState extends State<ConnectedDevicesWidget> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.red,
+            ),
             child: const Text('Remove'),
           ),
         ],
@@ -62,7 +64,7 @@ class _ConnectedDevicesWidgetState extends State<ConnectedDevicesWidget> {
 
     if (confirmed == true) {
       try {
-        // Remove this line - removeDevice method doesn't exist in CloudSyncService
+        // We treat "removing" as disabling sync for this device
         await _syncService.updateDevicePermissions(
           deviceId: deviceId,
           syncEnabled: false,
@@ -111,8 +113,11 @@ class _ConnectedDevicesWidgetState extends State<ConnectedDevicesWidget> {
       separatorBuilder: (context, index) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final device = widget.devices[index];
-        final lastSync = device.setupCompletedAt;
-        final isCurrentDevice = device.deviceId == 'current';
+
+        // On the sync model we use `lastActiveAt` as "last sync"
+        final DateTime lastSync = device.lastActiveAt;
+        final bool isCurrentDevice =
+            device.deviceId == 'current'; // adjust if you track current id
 
         return Card(
           elevation: 2,
@@ -142,21 +147,23 @@ class _ConnectedDevicesWidgetState extends State<ConnectedDevicesWidget> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // sync model uses `deviceName` instead of manufacturer
                           Text(
-                            device.deviceManufacturer ?? 'Unknown Device',
+                            device.deviceName,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Text(
-                            device.deviceModel ?? 'Unknown Model',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[600],
+                          if (device.deviceModel != null)
+                            Text(
+                              device.deviceModel!,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[600],
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ),
@@ -188,20 +195,29 @@ class _ConnectedDevicesWidgetState extends State<ConnectedDevicesWidget> {
                     const SizedBox(width: 8),
                     Text(
                       'Last synced: ${_formatLastSync(lastSync)}',
-                      style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey[600],
+                      ),
                     ),
                   ],
                 ),
-                if (device.androidVersion != null) ...[
+                if (device.osVersion != null) ...[
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.info_outline,
-                          size: 16, color: Colors.grey[600]),
+                      Icon(
+                        Icons.info_outline,
+                        size: 16,
+                        color: Colors.grey[600],
+                      ),
                       const SizedBox(width: 8),
                       Text(
-                        'Android ${device.androidVersion}',
-                        style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                        'OS ${device.osVersion}',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey[600],
+                        ),
                       ),
                     ],
                   ),
@@ -210,10 +226,14 @@ class _ConnectedDevicesWidgetState extends State<ConnectedDevicesWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if (!device.setupCompleted)
+                    // On sync model: use `syncEnabled` instead of `setupCompleted`
+                    if (!device.syncEnabled)
                       TextButton.icon(
                         onPressed: () => _authorizeDevice(device.id),
-                        icon: const Icon(Icons.check_circle_outline, size: 18),
+                        icon: const Icon(
+                          Icons.check_circle_outline,
+                          size: 18,
+                        ),
                         label: const Text('Authorize'),
                       ),
                     if (!isCurrentDevice) ...[

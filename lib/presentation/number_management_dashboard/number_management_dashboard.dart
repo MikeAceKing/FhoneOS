@@ -158,7 +158,7 @@ class _NumberManagementDashboardState extends State<NumberManagementDashboard> {
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: () => Navigator.pushNamed(
-                context, AppRoutes.phoneNumberPurchaseScreen),
+                context, AppRoutes.phoneNumberPurchase),
             icon: const Icon(Icons.add),
             label: const Text('Purchase Number'),
             style: ElevatedButton.styleFrom(
